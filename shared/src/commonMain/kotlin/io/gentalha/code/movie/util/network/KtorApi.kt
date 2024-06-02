@@ -45,7 +45,7 @@ internal abstract class KtorApi {
 
         install(Auth) {
             bearer {
-                BearerTokens("", "")
+                BearerTokens(API_KEY, "")
             }
         }
     }

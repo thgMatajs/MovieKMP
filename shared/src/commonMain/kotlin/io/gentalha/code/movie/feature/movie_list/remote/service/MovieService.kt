@@ -6,9 +6,11 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 
+private const val BASE_URL = "https://api.themoviedb.org/3/"
+
 internal class MovieService : KtorApi() {
     override val baseUrl: String
-        get() = TODO("Not yet implemented")
+        get() = BASE_URL
 
     suspend fun getMovies(page: Int): MoviesResponse = client.get {
         endPoint("movie/popular")
