@@ -6,6 +6,18 @@ plugins {
 }
 
 kotlin {
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            export(libs.androidx.lifecycle.viewmodel)
+            baseName = "MovieKit"
+        }
+    }
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -13,9 +25,6 @@ kotlin {
             }
         }
     }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
 
     cocoapods {
         summary = "Some description for the Shared Module"
@@ -46,7 +55,13 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.ktor.client.auth)
             implementation(libs.napier)
-            implementation(libs.koin.core)
+
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.composeVM)
+            implementation(libs.koin.test)
+
+            api(libs.androidx.lifecycle.viewmodel)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
