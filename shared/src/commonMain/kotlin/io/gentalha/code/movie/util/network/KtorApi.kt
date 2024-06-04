@@ -3,25 +3,21 @@ package io.gentalha.code.movie.util.network
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.auth.Auth
-import io.ktor.client.plugins.auth.providers.BearerTokens
-import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.accept
+import io.ktor.client.request.bearerAuth
+import io.ktor.client.request.url
 import io.ktor.http.ContentType
-import io.ktor.http.contentType
 import io.ktor.http.isSuccess
-import io.ktor.http.path
-import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-internal abstract class KtorApi {
+abstract class KtorApi {
 
     protected abstract val baseUrl: String
 
     protected val client = HttpClient {
-        install(KtorLogger.CustomLoggerPlugin)
 
         install(HttpTimeout) {
             socketTimeoutMillis = 60_000
@@ -43,19 +39,16 @@ internal abstract class KtorApi {
             retryIf { _, httpResponse -> !httpResponse.status.isSuccess() }
         }
 
-        install(Auth) {
-            bearer {
-                BearerTokens(API_KEY, "")
-            }
-        }
+        install(KtorLogger().customLoggerPlugin)
+//        install(Logging) {
+//            logger = KtorLogger()
+//            level = LogLevel.ALL
+//        }
     }
 
     protected fun HttpRequestBuilder.endPoint(path: String) {
-        url {
-            takeFrom(baseUrl)
-            path(path)
-            contentType(ContentType.Application.Json)
-        }
+        bearerAuth(API_KEY)
+        accept(ContentType.Application.Json)
+        url("$baseUrl$path")
     }
-
 }

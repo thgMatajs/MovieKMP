@@ -1,25 +1,25 @@
 package io.gentalha.code.movie.util.network
 
-import io.github.aakira.napier.Napier
 import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.statement.request
 
 private const val KTOR_LOG_TAG = "KtorLogger"
-internal object KtorLogger {
 
-    val CustomLoggerPlugin = createClientPlugin("CustomLoggerPlugin") {
+internal class KtorLogger {
+
+    val customLoggerPlugin = createClientPlugin("CustomLoggerPlugin") {
         onRequest { request, content ->
-            Napier.d(tag = KTOR_LOG_TAG) { "=============REQUEST==============" }
-            Napier.d(tag = KTOR_LOG_TAG) { "${request.method.value} => ${request.url}" }
-            Napier.d(tag = KTOR_LOG_TAG) { "BODY => ${request.body}" }
-            Napier.d(tag = KTOR_LOG_TAG) { "=============END-REQUEST==============" }
+            println("${KTOR_LOG_TAG}___=============REQUEST==============")
+            println("${KTOR_LOG_TAG}___${request.method.value} => ${request.url}")
+            println("${KTOR_LOG_TAG}___BODY => ${request.body}")
+            println("${KTOR_LOG_TAG}___=============END-REQUEST==============")
         }
 
-        onResponse {response ->
-            Napier.d(tag = KTOR_LOG_TAG) { "=============RESPONSE==============" }
-            Napier.d(tag = KTOR_LOG_TAG) { "${response.request.method.value} / ${response.status} => ${response.request.url}" }
-            Napier.d(tag = KTOR_LOG_TAG) { "BODY => $response" }
-            Napier.d(tag = KTOR_LOG_TAG) { "=============END-RESPONSE==============" }
+        onResponse { response ->
+            println("${KTOR_LOG_TAG}___=============RESPONSE==============")
+            println("${KTOR_LOG_TAG}___${response.request.method.value} / ${response.status} => ${response.request.url}")
+            println("${KTOR_LOG_TAG}___BODY => $response")
+            println("${KTOR_LOG_TAG}___=============END-RESPONSE==============")
         }
     }
 }
