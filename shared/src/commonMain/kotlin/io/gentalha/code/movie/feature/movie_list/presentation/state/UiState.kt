@@ -5,3 +5,10 @@ sealed class UIState {
     data class Failure(val error: Throwable) : UIState()
     data class Success<T>(val result: T) : UIState()
 }
+
+sealed class Resulted {
+    data object Loading : Resulted()
+    data class Error(val message: String) : Resulted()
+    data class Success(val result: String) : Resulted()
+
+}
