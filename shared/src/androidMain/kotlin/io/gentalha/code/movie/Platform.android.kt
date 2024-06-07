@@ -12,7 +12,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import java.util.Locale
 
-const val APP_VERSION_NAMED = "APP_VERSION"
+const val APP_VERSION_NAMED = "APP_VERSION" // mover para um arquivo de constantes
 class AndroidPlatform : IPlatform, KoinComponent {
 
     private val appVersionName: String by inject(named(APP_VERSION_NAMED))

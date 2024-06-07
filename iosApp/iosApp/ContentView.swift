@@ -15,8 +15,8 @@ struct ContentView: View {
                 } else {
                     Text("Filme: \(movie)")
                     Divider()
-                    Button("Atualizar Filme") {
-                        viewModelStoreOwner.instance.getMovies()
+                    Button("New Title") {
+                        viewModelStoreOwner.instance.getMovies(page: Int32(Int.random(in: 1...10)))
                     }
                 }
             }

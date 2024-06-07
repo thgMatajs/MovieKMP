@@ -34,14 +34,15 @@ open class MovieListViewModel : ViewModel(), KoinComponent {
     private val _movieResult = MutableStateFlow<Resulted>(Resulted.Loading)
     val movieResult: StateFlow<Resulted> = _movieResult.asStateFlow()
     init {
-        getMovies()
+        getMovies(1)
     }
 
-    fun getMovies() {
+    fun getMovies(page: Int) {
+        _movieUiState.update { UIState.Loading }
         viewModelScope.launch {
             _movie.update { "" }
             delay(1000L)
-            movieRepository.getMovies()
+            movieRepository.getMovies(page)
                 .flowOn(Dispatchers.IO)
                 .onStart {
                     _movieUiState.update { UIState.Loading }
@@ -54,11 +55,12 @@ open class MovieListViewModel : ViewModel(), KoinComponent {
                     _movieResult.update { Resulted.Error(error.message ?: "null error") }
                 }
                 .collect { movies ->
+                    val title = movies.random().title
                     _movieUiState.update {
-                        UIState.Success(movies.first().title)
+                        UIState.Success(title)
                     }
-                    _movie.update { movies.random().title }
-                    _movieResult.update { Resulted.Success(movies.random().title) }
+                    _movie.update { title }
+                    _movieResult.update { Resulted.Success(title) }
 
                 }
         }
