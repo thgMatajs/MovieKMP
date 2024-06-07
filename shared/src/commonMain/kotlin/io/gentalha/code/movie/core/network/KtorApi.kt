@@ -1,4 +1,4 @@
-package io.gentalha.code.movie.util.network
+package io.gentalha.code.movie.core.network
 
 import io.gentalha.code.movie.Platform
 import io.ktor.client.HttpClient
@@ -17,11 +17,8 @@ import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-abstract class KtorApi {
-
-    protected abstract val baseUrl: String
-
-    protected val client = HttpClient {
+class KtorApi {
+    val client = HttpClient {
 
         install(HttpTimeout) {
             socketTimeoutMillis = 60_000
@@ -54,10 +51,6 @@ abstract class KtorApi {
 //        }
     }
 
-    protected fun HttpRequestBuilder.endPoint(path: String) {
-        url("$baseUrl$path")
-    }
-
     private fun DefaultRequest.DefaultRequestBuilder.defaultHeaders() {
         val platform = Platform()
         header(HeaderName.Channel, platform.name)
@@ -68,6 +61,12 @@ abstract class KtorApi {
         accept(ContentType.Application.Json)
     }
 }
+
+
+fun HttpRequestBuilder.endPoint(baseUrl: String, path: String) {
+    url("$baseUrl$path")
+}
+
 
 internal object HeaderName {
     val Channel: String = "Channel"

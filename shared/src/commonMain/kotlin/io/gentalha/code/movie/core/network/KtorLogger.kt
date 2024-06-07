@@ -1,4 +1,4 @@
-package io.gentalha.code.movie.util.network
+package io.gentalha.code.movie.core.network
 
 import io.ktor.client.plugins.api.createClientPlugin
 import io.ktor.client.statement.request
