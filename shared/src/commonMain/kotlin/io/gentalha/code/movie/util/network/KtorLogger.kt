@@ -12,6 +12,7 @@ internal class KtorLogger {
             println("${KTOR_LOG_TAG}___=============REQUEST==============")
             println("${KTOR_LOG_TAG}___${request.method.value} => ${request.url}")
             println("${KTOR_LOG_TAG}___BODY => ${request.body}")
+            println("${KTOR_LOG_TAG}___HEADERS => ${request.headers.entries()}")
             println("${KTOR_LOG_TAG}___=============END-REQUEST==============")
         }
 

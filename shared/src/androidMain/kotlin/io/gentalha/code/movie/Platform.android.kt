@@ -1,17 +1,27 @@
 package io.gentalha.code.movie
 
 
+import android.os.Build.VERSION
 import io.gentalha.code.movie.feature.movie_list.data.MovieRepository
 import io.gentalha.code.movie.feature.movie_list.presentation.MovieListViewModel
 import io.gentalha.code.movie.feature.movie_list.remote.service.MovieService
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
+import java.util.Locale
 
-class AndroidPlatform : Platform {
-    override val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
+class AndroidPlatform : IPlatform {
+    override val name: String = "Android"
+
+    override val version: String
+        get() = VERSION.SDK_INT.toString()
+    override val appVersion: String
+        get() = "" // vou tentar pegar via DI, ou usar a lib: https://github.com/yshrsmz/BuildKonfig
+
+    override val language: String
+        get() = Locale.getDefault().language
 }
 
-actual fun getPlatform(): Platform = AndroidPlatform()
+actual fun getPlatform(): IPlatform = AndroidPlatform()
 
 actual fun platformModule() = module {
     single { MovieService() }

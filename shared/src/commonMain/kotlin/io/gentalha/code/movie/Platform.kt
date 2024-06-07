@@ -1,11 +1,15 @@
 package io.gentalha.code.movie
 
-import org.koin.core.module.Module
+class Platform {
+    private val platform: IPlatform = getPlatform()
 
-interface Platform {
-    val name: String
+    val name: String get() = platform.name
+
+    val version: String get() = platform.version
+
+    val appVersion: String get() = platform.appVersion
+
+
+    val language: String get() = platform.language
+
 }
-
-expect fun getPlatform(): Platform
-
-expect fun platformModule(): Module

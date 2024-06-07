@@ -1,12 +1,16 @@
 package io.gentalha.code.movie.util.network
 
+import io.gentalha.code.movie.Platform
 import io.ktor.client.HttpClient
+import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.accept
 import io.ktor.client.request.bearerAuth
+import io.ktor.client.request.header
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.isSuccess
@@ -34,6 +38,10 @@ abstract class KtorApi {
             )
         }
 
+        defaultRequest {
+            defaultHeaders()
+        }
+
         install(HttpRequestRetry) {
             maxRetries = 3
             retryIf { _, httpResponse -> !httpResponse.status.isSuccess() }
@@ -47,8 +55,23 @@ abstract class KtorApi {
     }
 
     protected fun HttpRequestBuilder.endPoint(path: String) {
-        bearerAuth(API_KEY)
-        accept(ContentType.Application.Json)
         url("$baseUrl$path")
     }
+
+    private fun DefaultRequest.DefaultRequestBuilder.defaultHeaders() {
+        val platform = Platform()
+        header(HeaderName.Channel, platform.name)
+        header(HeaderName.AppId, platform.appVersion)
+        header(HeaderName.Version, platform.version)
+        header(HeaderName.AcceptLanguage, platform.language)
+        bearerAuth(API_KEY)
+        accept(ContentType.Application.Json)
+    }
+}
+
+internal object HeaderName {
+    val Channel: String = "Channel"
+    val AppId: String = "AppId"
+    val Version: String = "Version"
+    val AcceptLanguage: String = "Accept-Language"
 }
