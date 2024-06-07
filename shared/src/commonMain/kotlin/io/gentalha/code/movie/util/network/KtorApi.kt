@@ -61,8 +61,8 @@ abstract class KtorApi {
     private fun DefaultRequest.DefaultRequestBuilder.defaultHeaders() {
         val platform = Platform()
         header(HeaderName.Channel, platform.name)
-        header(HeaderName.AppId, platform.appVersion)
-        header(HeaderName.Version, platform.version)
+        header(HeaderName.AppId, platform.version)
+        header(HeaderName.Version, platform.appVersion)
         header(HeaderName.AcceptLanguage, platform.language)
         bearerAuth(API_KEY)
         accept(ContentType.Application.Json)

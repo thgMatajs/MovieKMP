@@ -8,7 +8,7 @@ private const val KTOR_LOG_TAG = "KtorLogger"
 internal class KtorLogger {
 
     val customLoggerPlugin = createClientPlugin("CustomLoggerPlugin") {
-        onRequest { request, content ->
+        onRequest { request, _ ->
             println("${KTOR_LOG_TAG}___=============REQUEST==============")
             println("${KTOR_LOG_TAG}___${request.method.value} => ${request.url}")
             println("${KTOR_LOG_TAG}___BODY => ${request.body}")
