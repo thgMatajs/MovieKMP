@@ -1,12 +1,16 @@
 package io.gentalha.code.movie.core.network
 
 import io.gentalha.code.movie.Platform
+import io.github.aakira.napier.DebugAntilog
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.accept
 import io.ktor.client.request.bearerAuth
@@ -19,6 +23,8 @@ import kotlinx.serialization.json.Json
 
 class KtorApi {
     val client = HttpClient {
+
+//        install(KtorLogger().customLoggerPlugin)
 
         install(HttpTimeout) {
             socketTimeoutMillis = 60_000
@@ -33,6 +39,8 @@ class KtorApi {
                     ignoreUnknownKeys = true
                 }
             )
+        }.also {
+            Napier.base(DebugAntilog())
         }
 
         defaultRequest {
@@ -43,23 +51,21 @@ class KtorApi {
             maxRetries = 3
             retryIf { _, httpResponse -> !httpResponse.status.isSuccess() }
         }
-
-        install(KtorLogger().customLoggerPlugin)
-//        install(Logging) {
-//            logger = KtorLogger()
-//            level = LogLevel.ALL
-//        }
+        install(Logging) {
+            level = LogLevel.ALL
+            logger = KtorLogger()
+        }
     }
+}
 
-    private fun DefaultRequest.DefaultRequestBuilder.defaultHeaders() {
-        val platform = Platform()
-        header(HeaderName.Channel, platform.name)
-        header(HeaderName.AppId, platform.version)
-        header(HeaderName.Version, platform.appVersion)
-        header(HeaderName.AcceptLanguage, platform.language)
-        bearerAuth(API_KEY)
-        accept(ContentType.Application.Json)
-    }
+private fun DefaultRequest.DefaultRequestBuilder.defaultHeaders() {
+    val platform = Platform()
+    header(HeaderName.Channel, platform.name)
+    header(HeaderName.AppId, platform.version)
+    header(HeaderName.Version, platform.appVersion)
+    header(HeaderName.AcceptLanguage, platform.language)
+    bearerAuth(API_KEY)
+    accept(ContentType.Application.Json)
 }
 
 

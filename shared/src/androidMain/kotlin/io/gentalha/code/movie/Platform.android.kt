@@ -2,8 +2,6 @@ package io.gentalha.code.movie
 
 
 import android.os.Build.VERSION.SDK_INT
-import io.gentalha.code.movie.feature.movie_list.presentation.MovieListViewModel
-import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import org.koin.core.qualifier.named
@@ -27,6 +25,4 @@ class AndroidPlatform : IPlatform, KoinComponent {
 
 actual fun getPlatform(): IPlatform = AndroidPlatform()
 
-actual fun platformModule() = module {
-    viewModelOf<MovieListViewModel>(::MovieListViewModel)
-}
+actual fun platformModule() = module {}
